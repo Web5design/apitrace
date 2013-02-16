@@ -53,7 +53,7 @@ usage(void)
         "        --calls=CALLSET      Include specified calls in the trimmed output.\n"
         "        --frames=FRAMESET    Include specified frames in the trimmed output.\n"
         "        --deps               Include additional calls to satisfy dependencies\n"
-        "        --prune              Omit uninteresting calls from the trace output\n"
+        "        --prune              Omit calls without side effects from the output\n"
         "    -a, --auto               Trim automatically to calls specified in --calls/--frames\n"
         "                             Equivalent to both --deps and --prune\n"
         "        --print-callset      Print the final set of calls included in output\n"
@@ -210,8 +210,8 @@ trim_trace(const char *filename, struct trim_options *options)
             goto NEXT;
         }
 
-        /* Also, prune if uninteresting (unless the user asked for no pruning. */
-        if (options->prune_uninteresting && call->flags & trace::CALL_FLAG_VERBOSE) {
+        /* Also, prune if no side effects (unless the user asked for no pruning. */
+        if (options->prune_uninteresting && call->flags & trace::CALL_FLAG_NO_SIDE_EFFECTS) {
             goto NEXT;
         }
 
